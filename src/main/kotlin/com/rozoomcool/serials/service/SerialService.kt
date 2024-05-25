@@ -15,7 +15,7 @@ class SerialService(
     private val tagRepository: TagRepository,
     private val genreRepository: GenreRepository,
 ) {
-    fun getById(id: String): Mono<Serial> = serialRepository.findById(id)
+    fun getById(id: Long): Mono<Serial> = serialRepository.findById(id)
     fun getAllSerials(): Flux<Serial> = serialRepository.findAll()
     fun addSerial(serialRequest: SerialRequest): Mono<Serial> {
         val serial = Serial(
@@ -35,6 +35,6 @@ class SerialService(
             }
     }
 
-    fun updateSerial(serial: Serial): Mono<Serial> = serialRepository.insert(serial)
+    fun updateSerial(serial: Serial): Mono<Serial> = serialRepository.save(serial)
     fun deleteSerial(serial: Serial) = serialRepository.delete(serial)
 }
