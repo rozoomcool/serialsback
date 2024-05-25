@@ -4,6 +4,8 @@ import com.rozoomcool.serials.dto.SerialRequest
 import com.rozoomcool.serials.entity.Serial
 import com.rozoomcool.serials.service.SerialService
 import org.reactivestreams.Publisher
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
 import org.springframework.http.HttpStatus
@@ -22,12 +24,16 @@ class SerialController(
     private val serialService: SerialService,
     private val resourceLoader: ResourceLoader
 ) {
+    private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     @GetMapping
     fun getAllSerials(): Flux<Serial> = serialService.getAllSerials()
 
     @PostMapping
-    fun addSerials(@RequestBody serial: SerialRequest): Mono<Serial> = serialService.addSerial(serial)
+    fun addSerials(@RequestBody serial: Serial): Mono<Serial> {
+        logger.info("PROCESS POST /serial")
+        return serialService.addSerial(serial)
+    }
 
     @GetMapping("/aa")
     fun some(): Mono<ResponseEntity<Resource>> = Mono.just(

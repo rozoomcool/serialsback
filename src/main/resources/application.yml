@@ -25,10 +25,6 @@ spring:
     password: root
     pool:
       enabled: true
-  datasource:
-    url: jdbc:postgresql://localhost:5432/serialdb
-    username: postgres
-    password: root
   flyway:
     url: jdbc:postgresql://localhost:5432/serialdb
     user: postgres
