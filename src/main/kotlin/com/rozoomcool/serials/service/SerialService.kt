@@ -5,10 +5,7 @@ import com.rozoomcool.serials.entity.Serial
 import com.rozoomcool.serials.repository.GenreRepository
 import com.rozoomcool.serials.repository.SerialRepository
 import com.rozoomcool.serials.repository.TagRepository
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
@@ -18,23 +15,23 @@ class SerialService(
     private val tagRepository: TagRepository,
     private val genreRepository: GenreRepository,
 ) {
-
-    private val logger: Logger = LoggerFactory.getLogger(this::class.java)
-
-    fun getById(id: Long): Mono<Serial> = serialRepository.findById(id)
+    fun getById(id: String): Mono<Serial> = serialRepository.findById(id)
     fun getAllSerials(): Flux<Serial> = serialRepository.findAll()
+    fun addSerial(serialRequest: SerialRequest): Mono<Serial> {
+        val serial = Serial(
+            name = serialRequest.name,
+            description = serialRequest.desc
+        )
 
-    fun addSerial(serial: Serial): Mono<Serial> {
-        return genreRepository.save(serial.genre!!)
+        return genreRepository.save(serialRequest.genre)
             .flatMap { savedGenre ->
                 serial.genre = savedGenre
-                tagRepository.saveAll(serial.tags)
+                tagRepository.saveAll(serialRequest.tags)
                     .collectList()
-                    .flatMap { savedTags ->
-                        serial.tags.clear()
-                        serial.tags.addAll(savedTags)
-                        serialRepository.save(serial)
-                    }
+            }
+            .flatMap { savedTags ->
+                serial.tags.addAll(savedTags)
+                serialRepository.save(serial)
             }
     }
 

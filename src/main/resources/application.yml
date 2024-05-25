@@ -25,16 +25,6 @@ spring:
     password: root
     pool:
       enabled: true
-  flyway:
-    url: jdbc:postgresql://localhost:5432/serialdb
-    user: postgres
-    password: root
-    baselineOnMigrate: true
-
 logging:
   level:
     web: DEBUG
-    org:
-      springframework:
-        data:
-          r2dbc: DEBUG
