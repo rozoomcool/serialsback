@@ -15,6 +15,7 @@ spring:
     name: serials
   data:
     mongodb:
+      auto-index-creation: true
       uri: mongodb://localhost:27017/serialdb
 #    r2dbc:
 #      repositories:
