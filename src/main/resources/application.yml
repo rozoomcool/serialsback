@@ -16,15 +16,15 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/serialdb
-    r2dbc:
-      repositories:
-        enabled: true
-  r2dbc:
-    url: r2dbc:postgresql://localhost:5432/serialdb
-    username: postgres
-    password: root
-    pool:
-      enabled: true
+#    r2dbc:
+#      repositories:
+#        enabled: true
+#  r2dbc:
+#    url: r2dbc:postgresql://localhost:5432/serialdb
+#    username: postgres
+#    password: root
+#    pool:
+#      enabled: true
 logging:
   level:
     web: DEBUG

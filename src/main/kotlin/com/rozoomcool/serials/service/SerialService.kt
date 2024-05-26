@@ -5,6 +5,8 @@ import com.rozoomcool.serials.entity.Serial
 import com.rozoomcool.serials.repository.GenreRepository
 import com.rozoomcool.serials.repository.SerialRepository
 import com.rozoomcool.serials.repository.TagRepository
+import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrDefault
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -17,22 +19,18 @@ class SerialService(
 ) {
     fun getById(id: String): Mono<Serial> = serialRepository.findById(id)
     fun getAllSerials(): Flux<Serial> = serialRepository.findAll()
-    fun addSerial(serialRequest: SerialRequest): Mono<Serial> {
+
+    suspend fun addSerial(serialRequest: Serial): Mono<Serial> {
         val serial = Serial(
             name = serialRequest.name,
-            description = serialRequest.desc
+            description = serialRequest.description
         )
 
-        return genreRepository.save(serialRequest.genre)
-            .flatMap { savedGenre ->
-                serial.genre = savedGenre
-                tagRepository.saveAll(serialRequest.tags)
-                    .collectList()
-            }
-            .flatMap { savedTags ->
-                serial.tags.addAll(savedTags)
-                serialRepository.save(serial)
-            }
+        if (serialRequest.genre != null) serial.genre = genreRepository.save(serialRequest.genre!!).awaitFirst()
+        serial.tags = tagRepository.saveAll(serialRequest.tags).collectList().awaitFirst()
+        serial.author = serialRequest.author
+
+        return serialRepository.save(serial)
     }
 
     fun updateSerial(serial: Serial): Mono<Serial> = serialRepository.save(serial)

@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document(collection = "serial")
 class Serial (
     @Id
-    var id: Long? = null,
+    var id: String? = null,
     var name: String? = null,
     var description: String? = null,
     var author: String? = null,

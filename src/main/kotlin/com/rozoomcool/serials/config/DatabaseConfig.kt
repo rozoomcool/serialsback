@@ -3,7 +3,7 @@ package com.rozoomcool.serials.config
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
-import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
+//import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 
 
 //@Configuration

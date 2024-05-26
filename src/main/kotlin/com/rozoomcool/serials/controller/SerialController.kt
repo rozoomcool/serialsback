@@ -3,6 +3,7 @@ package com.rozoomcool.serials.controller
 import com.rozoomcool.serials.dto.SerialRequest
 import com.rozoomcool.serials.entity.Serial
 import com.rozoomcool.serials.service.SerialService
+import kotlinx.coroutines.reactor.awaitSingle
 import org.reactivestreams.Publisher
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -27,29 +28,35 @@ class SerialController(
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     @GetMapping
-    fun getAllSerials(): Flux<Serial> = serialService.getAllSerials()
+    suspend fun getAllSerials(): Flux<Serial> = serialService.getAllSerials()
 
     @PostMapping
-    fun addSerials(@RequestBody serial: Serial): Mono<Serial> {
+    suspend fun addSerials(@RequestBody serial: Serial): Mono<Serial> {
         logger.info("PROCESS POST /serial")
         return serialService.addSerial(serial)
     }
 
-    @GetMapping("/aa")
-    fun some(): Mono<ResponseEntity<Resource>> = Mono.just(
-        ResponseEntity.status(HttpStatus.OK)
-            .contentType(MediaType.asMediaType(MimeType.valueOf("VIDEO/MP4")))
-            .body(
-                resourceLoader.getResource("classpath:media/videoplayback.mp4")
-            )
-    )
+    @GetMapping("/{id}")
+    suspend fun getSerial(@PathVariable("id") serialId: String): Serial {
+        return serialService.getById(id = serialId).awaitSingle()
+    }
 
-    @GetMapping("/bb")
-    fun somee(): ResponseEntity<Resource> =
-        ResponseEntity.status(HttpStatus.OK)
-            .contentType(MediaType.asMediaType(MimeType.valueOf("VIDEO/MP4")))
-            .body(
-                resourceLoader.getResource("classpath:media/videoplayback.mp4")
-            )
+//
+//    @GetMapping("/aa")
+//    suspend fun some(): Mono<ResponseEntity<Resource>> = Mono.just(
+//        ResponseEntity.status(HttpStatus.OK)
+//            .contentType(MediaType.asMediaType(MimeType.valueOf("VIDEO/MP4")))
+//            .body(
+//                resourceLoader.getResource("classpath:media/videoplayback.mp4")
+//            )
+//    )
+//
+//    @GetMapping("/bb")
+//    fun somee(): ResponseEntity<Resource> =
+//        ResponseEntity.status(HttpStatus.OK)
+//            .contentType(MediaType.asMediaType(MimeType.valueOf("VIDEO/MP4")))
+//            .body(
+//                resourceLoader.getResource("classpath:media/videoplayback.mp4")
+//            )
 
 }
