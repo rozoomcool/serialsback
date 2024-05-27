@@ -10,5 +10,5 @@ data class Genre(
     @Id
     var id: String? = null,
     @Indexed(unique = true)
-    var name: String
+    var name: String? = null
 )

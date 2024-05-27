@@ -3,6 +3,7 @@ package com.rozoomcool.serials.controller
 import com.rozoomcool.serials.dto.SerialRequest
 import com.rozoomcool.serials.entity.Serial
 import com.rozoomcool.serials.service.SerialService
+import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingle
 import org.reactivestreams.Publisher
 import org.slf4j.Logger

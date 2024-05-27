@@ -15,7 +15,7 @@ data class Serial (
     var author: String,
     var year: Int,
     @DocumentReference
-    var genre: Genre,
+    var genre: Genre? = null,
     var serialType: SerialType,
     @DocumentReference
     var seasons: MutableSet<Season> = mutableSetOf(),
