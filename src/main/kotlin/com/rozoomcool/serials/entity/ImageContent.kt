@@ -5,9 +5,9 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "images")
-data class ImageContent (
+data class ImageContent(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: String? = null,
+    var id: Long? = null,
     var contentType: String,
     @Column(unique = true, nullable = false)
     var name: String

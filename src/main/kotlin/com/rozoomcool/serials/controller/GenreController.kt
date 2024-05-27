@@ -14,7 +14,7 @@ class GenreController(
     private val genreService: GenreService
 ) {
     @GetMapping
-    fun getAll(): Flux<Genre> = genreService.findAll()
+    fun getAll(): Iterable<Genre> = genreService.findAll()
 
     @GetMapping("/{id}")
     fun getById(@PathVariable id: String) = genreService.findById(id)

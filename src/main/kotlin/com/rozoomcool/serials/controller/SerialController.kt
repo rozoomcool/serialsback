@@ -2,6 +2,7 @@ package com.rozoomcool.serials.controller
 
 import com.rozoomcool.serials.dto.SerialRequest
 import com.rozoomcool.serials.entity.Serial
+import com.rozoomcool.serials.exception.SerialAlreadyExistsException
 import com.rozoomcool.serials.service.SerialService
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingle
@@ -29,17 +30,24 @@ class SerialController(
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     @GetMapping
-    suspend fun getAllSerials(): Flux<Serial> = serialService.getAllSerials()
+    suspend fun getAllSerials(): Iterable<Serial> = serialService.getAllSerials()
 
     @PostMapping
-    suspend fun addSerials(@RequestBody serial: Serial): Mono<Serial> {
+    fun addSerials(@RequestBody serial: Serial): ResponseEntity<Any?> {
         logger.info("PROCESS POST /serial")
-        return serialService.addSerial(serial)
+        return try {
+            ResponseEntity.ok(serialService.addSerial(serial))
+        } catch (e: SerialAlreadyExistsException) {
+            ResponseEntity(e.message, HttpStatus.CONFLICT)
+        }
+//        catch (e: Exception) {
+//            ResponseEntity("Bad request", HttpStatus.BAD_REQUEST)
+//        }
     }
 
     @GetMapping("/{id}")
     suspend fun getSerial(@PathVariable("id") serialId: String): Serial {
-        return serialService.getById(id = serialId).awaitSingle()
+        return serialService.getById(id = serialId)
     }
 
 //

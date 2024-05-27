@@ -5,8 +5,8 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "tags")
 data class Tag(
-    @Id
-    var id: String? = null,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
     @Column(unique = true, nullable = false)
     var name: String
 )

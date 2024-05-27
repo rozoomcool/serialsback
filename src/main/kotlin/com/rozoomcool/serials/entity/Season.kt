@@ -6,7 +6,7 @@ import jakarta.persistence.*
 @Table(name = "seasons")
 data class Season (
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: String? = null,
+    var id: Long? = null,
     var number: Int,
     var description: String,
     @OneToMany(cascade = [(CascadeType.ALL)])

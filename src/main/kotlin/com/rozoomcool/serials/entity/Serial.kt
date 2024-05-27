@@ -6,20 +6,21 @@ import jakarta.persistence.*
 @Table(name = "serial")
 data class Serial (
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: String? = null,
+    var id: Long? = null,
     @Column(unique = true, nullable = false)
     var name: String,
     var description: String,
     var author: String,
     var year: Int,
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     var genre: Genre,
+    @Enumerated(EnumType.STRING)
     var serialType: SerialType,
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     var seasons: MutableSet<Season> = mutableSetOf(),
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     var images: MutableSet<ImageContent> = mutableSetOf(),
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     var tags: MutableSet<Tag> = mutableSetOf(),
 ) {
 }

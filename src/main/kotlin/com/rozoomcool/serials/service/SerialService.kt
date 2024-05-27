@@ -1,38 +1,28 @@
 package com.rozoomcool.serials.service
 
-import com.rozoomcool.serials.entity.Genre
 import com.rozoomcool.serials.entity.Serial
-import com.rozoomcool.serials.entity.Tag
+import com.rozoomcool.serials.exception.SerialAlreadyExistsException
 import com.rozoomcool.serials.repository.*
-import kotlinx.coroutines.reactive.awaitFirst
-import kotlinx.coroutines.reactive.awaitSingle
-import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
-import reactor.kotlin.core.publisher.toMono
-import java.lang.reflect.TypeVariable
 
 @Service
 class SerialService(
     private val serialRepository: SerialRepository,
-    private val tagService: TagService,
-    private val genreRepository: GenreRepository,
-    private val seasonRepository: SeasonRepository,
-    private val episode: EpisodeRepository,
-    private val mongoTemplate: ReactiveMongoTemplate,
+    private val genreService: GenreService,
+    private val tagService: TagService
 ) {
-    fun getById(id: String): Mono<Serial> = serialRepository.findById(id)
-    fun getAllSerials(): Flux<Serial> = mongoTemplate.findAll(Serial::class.java)
+    fun getById(id: String): Serial = serialRepository.findById(id).orElseThrow()
+    fun getAllSerials(): Iterable<Serial> = serialRepository.findAll()
 
-    suspend fun addSerial(serial: Serial): Mono<Serial> {
-        serial.genre = genreRepository.save(serial.genre!!).awaitFirst()
-        serial.tags = tagService.saveIfNotExists(serial.tags).toMutableSet()
-        serial.seasons = seasonRepository.saveAll(serial.seasons).collectList().awaitFirst().toMutableSet()
+    fun addSerial(serial: Serial): Serial {
+        if (serialRepository.existsByName(serial.name)) throw SerialAlreadyExistsException()
+        serial.genre = genreService.findOrSaveIfNotExists(serial.genre)
+        serial.tags = serial.tags.map { tagService.findOrSaveIfNotExists(it) }.toMutableSet()
         return serialRepository.save(serial)
     }
 
-    fun updateSerial(serial: Serial): Mono<Serial> = serialRepository.save(serial)
+    fun updateSerial(serial: Serial): Serial = serialRepository.save(serial)
     fun deleteSerial(serial: Serial) = serialRepository.delete(serial)
 }

@@ -3,9 +3,9 @@ package com.rozoomcool.serials.entity
 import jakarta.persistence.*
 
 @Entity
-data class Genre(
+class Genre (
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: String? = null,
+    var id: Long? = null,
     @Column(unique = true, nullable = false)
     var name: String
 )
