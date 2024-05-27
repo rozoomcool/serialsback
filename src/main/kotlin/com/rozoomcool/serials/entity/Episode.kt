@@ -1,14 +1,13 @@
 package com.rozoomcool.serials.entity
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.data.mongodb.core.mapping.DocumentReference
+import jakarta.persistence.*
 
-@Document(collection = "episodes")
+@Entity
+@Table(name = "episodes")
 data class Episode(
-    @Id var id: String? = null,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: String? = null,
     var title: String,
     var description: String,
-    @DocumentReference
+    @OneToOne(cascade = [(CascadeType.ALL)], fetch = FetchType.LAZY)
     var videoContent: VideoContent
 )

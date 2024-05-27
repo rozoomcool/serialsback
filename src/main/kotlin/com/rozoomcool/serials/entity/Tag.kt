@@ -1,13 +1,12 @@
 package com.rozoomcool.serials.entity
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.Document
+import jakarta.persistence.*
 
-@Document(collection = "tags")
+@Entity
+@Table(name = "tags")
 data class Tag(
     @Id
     var id: String? = null,
-    @Indexed(unique = true)
+    @Column(unique = true, nullable = false)
     var name: String
 )

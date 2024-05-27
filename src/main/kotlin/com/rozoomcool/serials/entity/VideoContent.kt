@@ -1,11 +1,13 @@
 package com.rozoomcool.serials.entity
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
+import jakarta.persistence.*
 
-@Document(collection = "videos")
+@Entity
+@Table(name = "videos")
 data class VideoContent(
-    @Id var id: String? = null,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: String? = null,
     var contentType: String,
+    @Column(unique = true, nullable = false)
     var name: String
 )

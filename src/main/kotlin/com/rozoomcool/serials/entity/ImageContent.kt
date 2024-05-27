@@ -1,12 +1,14 @@
 package com.rozoomcool.serials.entity
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.Document
+import jakarta.persistence.*
 
-@Document(collection = "images")
+
+@Entity
+@Table(name = "images")
 data class ImageContent (
-    @Id var id: String? = null,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: String? = null,
     var contentType: String,
+    @Column(unique = true, nullable = false)
     var name: String
 )

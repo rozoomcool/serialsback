@@ -1,14 +1,11 @@
 package com.rozoomcool.serials.entity
 
-import org.bson.types.ObjectId
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.Document
+import jakarta.persistence.*
 
-@Document(collection = "genres")
+@Entity
 data class Genre(
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: String? = null,
-    @Indexed(unique = true)
-    var name: String? = null
+    @Column(unique = true, nullable = false)
+    var name: String
 )

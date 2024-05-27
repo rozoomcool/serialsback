@@ -1,18 +1,16 @@
 package com.rozoomcool.serials.entity
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.data.mongodb.core.mapping.DocumentReference
+import jakarta.persistence.*
 
-@Document(collection = "seasons")
+@Entity
+@Table(name = "seasons")
 data class Season (
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: String? = null,
     var number: Int,
-    var title: String,
     var description: String,
-    @DocumentReference
+    @OneToMany(cascade = [(CascadeType.ALL)])
     var episodes: MutableSet<Episode> = mutableSetOf(),
-    @DocumentReference
+    @OneToMany(cascade = [(CascadeType.ALL)])
     var images: MutableSet<ImageContent> = mutableSetOf(),
 )

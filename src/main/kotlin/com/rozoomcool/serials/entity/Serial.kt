@@ -1,26 +1,25 @@
 package com.rozoomcool.serials.entity
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.data.mongodb.core.mapping.DocumentReference
+import jakarta.persistence.*
 
-@Document(collection = "serials")
+@Entity
+@Table(name = "serial")
 data class Serial (
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: String? = null,
-    @Indexed(unique = true)
+    @Column(unique = true, nullable = false)
     var name: String,
     var description: String,
     var author: String,
     var year: Int,
-    @DocumentReference
-    var genre: Genre? = null,
+    @ManyToOne(fetch = FetchType.LAZY)
+    var genre: Genre,
     var serialType: SerialType,
-    @DocumentReference
+    @OneToMany(fetch = FetchType.LAZY)
     var seasons: MutableSet<Season> = mutableSetOf(),
-    @DocumentReference
+    @OneToMany(fetch = FetchType.LAZY)
     var images: MutableSet<ImageContent> = mutableSetOf(),
-    @DocumentReference
+    @OneToMany(fetch = FetchType.LAZY)
     var tags: MutableSet<Tag> = mutableSetOf(),
-)
+) {
+}
